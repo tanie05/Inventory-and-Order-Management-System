@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 from . import orders_bp
 from .models import Order, OrderItem
@@ -12,6 +13,7 @@ logger = setup_logger(__name__)
 
 
 @orders_bp.route("/", methods=["GET"])
+@jwt_required()
 def get_orders():
     try:
         logger.debug("Fetching all orders")
@@ -24,6 +26,7 @@ def get_orders():
 
 
 @orders_bp.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_order(id):
     try:
         logger.debug(f"Fetching order id={id}")
@@ -38,6 +41,7 @@ def get_order(id):
 
 
 @orders_bp.route("/", methods=["POST"])
+@jwt_required()
 def create_order():
     try:
         data = request.get_json()
@@ -103,6 +107,7 @@ def create_order():
 
 
 @orders_bp.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_order(id):
     try:
         order = Order.query.get(id)

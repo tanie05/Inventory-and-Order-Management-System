@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 from . import customers_bp
 from .models import Customer
@@ -10,6 +11,7 @@ logger = setup_logger(__name__)
 
 
 @customers_bp.route("/", methods=["GET"])
+@jwt_required()
 def get_customers():
     try:
         logger.debug("Fetching all customers")
@@ -22,6 +24,7 @@ def get_customers():
 
 
 @customers_bp.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_customer(id):
     try:
         logger.debug(f"Fetching customer id={id}")
@@ -36,6 +39,7 @@ def get_customer(id):
 
 
 @customers_bp.route("/", methods=["POST"])
+@jwt_required()
 def create_customer():
     try:
         data = request.get_json()
@@ -65,6 +69,7 @@ def create_customer():
 
 
 @customers_bp.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_customer(id):
     try:
         customer = Customer.query.get(id)
