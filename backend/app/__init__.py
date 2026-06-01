@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from .extensions import db, migrate
+from .extensions import db, migrate, limiter
 from .config import DATABASE_URL
 
 
@@ -10,6 +10,7 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+    limiter.init_app(app)
 
     from .products import products_bp
     from .products.models import Product
@@ -27,5 +28,3 @@ def create_app():
         return jsonify({"message": "Hello World"})
 
     return app
-
-
